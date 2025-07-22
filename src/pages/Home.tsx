@@ -1,8 +1,8 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
-import BenefitsSection from '../components/BenefitsSection';
-import ProcessSection from '../components/ProcessSection';
+// import BenefitsSection from '../components/BenefitsSection';
+// import ProcessSection from '../components/ProcessSection';
 import CTASection from '../components/CTASection';
 
 const Home = () => {
@@ -14,11 +14,11 @@ const Home = () => {
       {/* About Section with Stats and Roadmap */}
       <AboutSection />
       
-      {/* Benefits Section */}
-      <BenefitsSection selectedRole="partner" />
+      {/* Benefits Section - Hidden */}
+      {/* <BenefitsSection selectedRole="partner" /> */}
       
-      {/* Process Section */}
-      <ProcessSection selectedRole="partner" />
+      {/* Process Section - Hidden */}
+      {/* <ProcessSection selectedRole="partner" /> */}
       
       {/* CTA Section with Role Selection */}
       <CTASection />

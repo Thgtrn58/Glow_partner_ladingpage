@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Users, TrendingUp, Eye, DollarSign, ChevronRight, Facebook, Youtube, Twitter, Smartphone, Monitor, Phone, Mail, MapPin } from 'lucide-react';
 import Home from './pages/Home';
+import GlowLogo from './assets/Logo Glow.png';
 
 interface FormData {
   name: string;
@@ -62,7 +63,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* Header */}
       <header className="bg-glow-600 text-white py-4 px-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">GLOW</Link>
+          <Link to="/" className="flex items-center">
+            <img src={GlowLogo} alt="Glow Logo" className="h-8" />
+          </Link>
           <nav className="hidden md:flex space-x-8">
             <a href="#" onClick={handleScrollToAbout} className="hover:text-glow-200 transition-colors">Về Glow</a>
             <a href="#" onClick={handleScrollToCTA} className="hover:text-glow-200 transition-colors">Hợp tác cùng Glow</a>
@@ -79,7 +82,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <div className="text-2xl font-bold mb-4">GLOW</div>
+              <div className="mb-4">
+                <img src={GlowLogo} alt="Glow Logo" className="h-8" />
+              </div>
               <p className="text-glow-200 mb-4">Nền tảng dịch vụ tận nơi</p>
               <div className="space-y-2 text-sm text-glow-200">
                 <p>Công ty Cổ Phần Công nghệ BK Việt Nam</p>

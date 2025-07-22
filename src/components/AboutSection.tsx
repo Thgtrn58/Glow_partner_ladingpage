@@ -100,7 +100,7 @@ const AboutSection: React.FC = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="relative py-6 bg-gradient-to-br from-gray-50 via-white to-glow-50 overflow-hidden">
+    <section ref={sectionRef} className="relative py-6 pb-20 bg-gradient-to-br from-gray-50 via-white to-glow-50 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-glow-50/20 to-glow-100/10"></div>
