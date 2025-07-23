@@ -154,21 +154,85 @@ const AboutSection: React.FC = () => {
         {/* Roadmap Section */}
         <div className={`transition-all duration-1000 delay-800 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="text-center mb-6">
-            <h3 className="text-4xl font-bold text-glow-500 mb-2">
+            <h3 className="text-2xl md:text-4xl font-bold text-glow-500 mb-2">
               Mục tiêu của chúng tôi
             </h3>
             <div className="flex items-center justify-center gap-3 mb-3">
-              <div className="w-12 h-0.5 bg-glow-600 rounded-full"></div>
+              <div className="w-8 md:w-12 h-0.5 bg-glow-600 rounded-full"></div>
               <div className="w-3 h-3 bg-glow-600 rounded-full"></div>
-              <div className="w-12 h-0.5 bg-glow-600 rounded-full"></div>
+              <div className="w-8 md:w-12 h-0.5 bg-glow-600 rounded-full"></div>
             </div>
-            <p className="text-base text-gray-600 max-w-2xl mx-auto mb-8">
+            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto mb-6 md:mb-8 px-4">
               Hành trình phát triển và mở rộng của Glow
             </p>
           </div>
 
-          {/* Curved Road Timeline */}
-          <div className="relative w-full px-4">
+          {/* Mobile Layout - Vertical Timeline */}
+          <div className="block md:hidden px-4 space-y-8">
+            {roadmapData.map((item, index) => (
+              <div
+                key={item.year}
+                className={`relative transition-all duration-1000 transform ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${1500 + index * 300}ms` }}
+              >
+                {/* Vertical Line */}
+                {index < roadmapData.length - 1 && (
+                  <div className="absolute left-5 top-10 w-0.5 h-20 bg-glow-300"></div>
+                )}
+                
+                <div className="flex items-start gap-4">
+                  {/* Marker Point */}
+                  <div className="flex-shrink-0">
+                    <div 
+                      className={`w-10 h-10 rounded-full bg-gradient-to-r ${item.color} 
+                        flex items-center justify-center shadow-lg border-4 border-white
+                        transform transition-all duration-500 ${isVisible ? 'scale-100 rotate-0' : 'scale-0 rotate-180'}`}
+                      style={{ transitionDelay: `${2000 + index * 300}ms` }}
+                    >
+                      <span className="text-sm font-bold text-white">{index + 1}</span>
+                    </div>
+                  </div>
+
+                  {/* Content Card */}
+                  <div 
+                    className="bg-white rounded-xl p-4 shadow-xl flex-1
+                      border border-glow-100/50 transition-all duration-500
+                      hover:shadow-2xl"
+                    style={{
+                      transitionDelay: `${2300 + index * 300}ms`,
+                      animation: isVisible 
+                        ? 'fadeSlideUp 0.8s ease-out forwards'
+                        : 'none'
+                    }}
+                  >
+                    <div className="text-lg font-bold text-glow-600 mb-1">{item.year}</div>
+                    <h4 className="text-base font-bold text-gray-900 mb-2">{item.title}</h4>
+                    <div className="space-y-1.5">
+                      {item.achievements.map((achievement, i) => (
+                        <div 
+                          key={i} 
+                          className="flex items-start gap-2 transition-all duration-300"
+                          style={{ 
+                            transitionDelay: `${2600 + index * 300 + i * 150}ms`,
+                            opacity: isVisible ? 1 : 0,
+                            transform: isVisible ? 'translateX(0)' : 'translateX(-20px)'
+                          }}
+                        >
+                          <div className="flex-shrink-0 w-1.5 h-1.5 mt-1.5 rounded-full bg-glow-500"></div>
+                          <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">{achievement}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Layout - Curved Road Timeline */}
+          <div className="hidden md:block relative w-full px-4">
             {/* Curved Road Background */}
             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2">
               <svg className="w-full" height="160" viewBox="0 0 1200 180" fill="none" preserveAspectRatio="none">
@@ -196,20 +260,18 @@ const AboutSection: React.FC = () => {
               {roadmapData.map((item, index) => (
                 <div
                   key={item.year}
-                  className={`relative flex-1 ${
-                    index % 2 === 0 ? '-mt-32' : 'mt-32'
-                  } transition-all duration-1000 transform ${
+                  className={`relative flex-1 ${index % 2 === 0 ? '-mt-32' : 'mt-32'} transition-all duration-1000 transform ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                   }`}
                   style={{ transitionDelay: `${1500 + index * 300}ms` }}
                 >
                   {/* Marker Point */}
-                  <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                     <div 
                       className={`w-10 h-10 rounded-full bg-gradient-to-r ${item.color} 
                         flex items-center justify-center shadow-lg border-4 border-white
                         transform transition-all duration-500 ${isVisible ? 'scale-100 rotate-0' : 'scale-0 rotate-180'}
-                        hover:scale-110 z-10`}
+                        hover:scale-110`}
                       style={{ transitionDelay: `${2000 + index * 300}ms` }}
                     >
                       <span className="text-base font-bold text-white">{index + 1}</span>
@@ -220,7 +282,7 @@ const AboutSection: React.FC = () => {
                   <div 
                     className={`bg-white rounded-xl p-4 shadow-xl mx-3 
                       border border-glow-100/50 transition-all duration-500
-                      hover:shadow-2xl ${index % 2 === 0 ? 'mt-6' : 'mb-6'}`}
+                      hover:shadow-2xl ${index % 2 === 0 ? 'mt-6' : 'mb-6'} z-10`}
                     style={{
                       transitionDelay: `${2300 + index * 300}ms`,
                       animation: isVisible 

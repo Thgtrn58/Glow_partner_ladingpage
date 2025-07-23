@@ -102,7 +102,7 @@ const HeroSection: React.FC = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen bg-gradient-to-br from-white to-glow-50 overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen bg-gradient-to-br from-white to-glow-50 overflow-hidden sm:flex sm:flex-col">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         {/* Floating Circles */}
@@ -116,16 +116,16 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* Header */}
-      <div className="relative z-10 pt-6 px-6">
+      <div className="relative z-10 pt-6 px-6 sm:flex-shrink-0">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 pt-40 px-6">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative z-10 pt-20 sm:pt-0 px-6 sm:flex-1 sm:flex sm:items-center">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-12">
-            <h1 className={`text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <h1 className={`text-5xl sm:text-6xl lg:text-8xl font-bold text-gray-900 mb-6 leading-tight transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               Tăng doanh thu <span className="text-glow-600">miễn phí</span>
               <br />
               <span className="text-glow-700">& tiếp cận khách hàng</span>
@@ -134,51 +134,56 @@ const HeroSection: React.FC = () => {
             </h1>
             
             <div className={`transition-all duration-1000 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <p className="text-xl text-gray-700 mb-6 max-w-5xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-gray-700 mb-6 max-w-5xl mx-auto leading-relaxed px-4">
                 Nền tảng kết nối hàng đầu Việt Nam dành cho các dịch vụ chăm sóc sức khỏe và sắc đẹp
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
+              <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center mb-8 sm:mb-10 px-4">
                 <button 
                   onClick={handleScrollToCTA}
-                  className="group bg-glow-600 hover:bg-glow-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-2"
+                  className="group bg-glow-600 hover:bg-glow-700 text-white px-4 py-2 sm:px-8 sm:py-4 rounded-full font-semibold text-sm sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-1 sm:space-x-2 flex-1 sm:flex-none justify-center"
                 >
-                  <span>Bắt đầu ngay</span>
-                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <span className="whitespace-nowrap">Bắt đầu ngay</span>
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button className="group bg-glow-600 hover:bg-glow-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-2">
-                  <PlayCircle className="w-6 h-6" />
-                  <span>Xem demo</span>
-                </button>
+                <a 
+                  href="https://glowvietnam.com/vi/partner" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group bg-glow-600 hover:bg-glow-700 text-white px-4 py-2 sm:px-8 sm:py-4 rounded-full font-semibold text-sm sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-1 sm:space-x-2 flex-1 sm:flex-none justify-center"
+                >
+                  <PlayCircle className="w-4 h-4 sm:w-6 sm:h-6" />
+                  <span className="whitespace-nowrap">Xem demo</span>
+                </a>
               </div>
             </div>
           </div>
 
           {/* Statistics */}
-          <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 transition-all duration-1000 delay-600 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 border border-glow-100/50">
-              <div className="text-4xl lg:text-5xl font-bold text-glow-600 mb-2">
+          <div className={`grid grid-cols-3 gap-2 sm:gap-6 mb-24 sm:mb-0 transition-all duration-1000 delay-600 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} px-4`}>
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 border border-glow-100/50">
+              <div className="text-xl sm:text-4xl lg:text-5xl font-bold text-glow-600 mb-1 sm:mb-2">
                 {animatedNumbers.downloads.toLocaleString()}+ 
               </div>
-              <div className="text-gray-700 font-medium text-sm uppercase tracking-wide">
+              <div className="text-gray-700 font-medium text-xs sm:text-sm uppercase tracking-wide leading-tight">
                 lượt tải ứng dụng
               </div>
             </div>
             
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 border border-glow-100/50">
-              <div className="text-4xl lg:text-5xl font-bold text-glow-600 mb-2">
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 border border-glow-100/50">
+              <div className="text-xl sm:text-4xl lg:text-5xl font-bold text-glow-600 mb-1 sm:mb-2">
                 {animatedNumbers.users.toLocaleString()}+
               </div>
-              <div className="text-gray-700 font-medium text-sm uppercase tracking-wide">
+              <div className="text-gray-700 font-medium text-xs sm:text-sm uppercase tracking-wide leading-tight">
                 người dùng đăng ký
               </div>
             </div>
             
-            <div className="text-center bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 border border-glow-100/50">
-              <div className="text-4xl lg:text-5xl font-bold text-glow-600 mb-2">
+            <div className="text-center bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:scale-105 border border-glow-100/50">
+              <div className="text-xl sm:text-4xl lg:text-5xl font-bold text-glow-600 mb-1 sm:mb-2">
                 {animatedNumbers.technicians.toLocaleString()}+
               </div>
-              <div className="text-gray-700 font-medium text-sm uppercase tracking-wide">
+              <div className="text-gray-700 font-medium text-xs sm:text-sm uppercase tracking-wide leading-tight">
                 kỹ thuật viên
               </div>
             </div>

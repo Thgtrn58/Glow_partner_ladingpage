@@ -1,0 +1,518 @@
+// Cấu hình email và spreadsheet
+const CONFIG = {
+  ADMIN_EMAIL: 'partner@glowvietnam.com',
+  SPREADSHEET_ID: SpreadsheetApp.getActiveSpreadsheet().getId(),
+  COMPANY_INFO: {
+    // Sử dụng URL trực tiếp từ Google Drive với format đặc biệt
+    LOGO_URL: 'https://lh3.googleusercontent.com/d/1RDyOH2NRA12amBJn56MSSdExUHlV8p05',
+    SOCIAL_LINKS: {
+      LINKEDIN: 'https://www.linkedin.com/company/glowvietnam',
+      FACEBOOK: 'https://www.facebook.com/glowvietnam',
+      WEBSITE: 'https://glowvietnam.com'
+    }
+  }
+};
+
+/**
+ * Tạo template email cho Kỹ thuật viên
+ */
+function createTechnicianEmailBody(data) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+      <!-- Header with Logo and Background -->
+      <div style="text-align: center; padding: 20px 0; background-color: #5d784f; border-radius: 8px 8px 0 0;">
+        <img src="${CONFIG.COMPANY_INFO.LOGO_URL}" 
+             alt="Glow Logo" 
+             style="max-width: 150px; height: auto;">
+      </div>
+
+      <!-- Main Content -->
+      <div style="padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px;">
+        <h2 style="color: #5d784f; margin-bottom: 20px; font-size: 24px;">
+          Xác nhận đăng ký thông tin Kỹ thuật viên
+        </h2>
+        
+        <p style="font-size: 16px; line-height: 1.5;">Xin chào <strong style="color: #5d784f;">${data.name}</strong>,</p>
+        
+        <p style="font-size: 16px; line-height: 1.5;">Cảm ơn bạn đã quan tâm đến vị trí Kỹ thuật viên tại Glow. Chúng tôi đã nhận được thông tin đăng ký của bạn.</p>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #5d784f;">
+          <p style="color: #5d784f; font-weight: bold; margin-bottom: 15px;">Thông tin của bạn:</p>
+          <ul style="list-style: none; padding-left: 0; margin: 0;">
+            <li style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;"><strong>Họ và tên:</strong> ${data.name}</li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;"><strong>Email:</strong> ${data.email}</li>
+            <li style="padding: 8px 0;"><strong>Số điện thoại:</strong> ${data.phone}</li>
+          </ul>
+
+          <p style="color: #5d784f; font-weight: bold; margin: 20px 0 15px;">Các bước tiếp theo:</p>
+          <ol style="margin: 0; padding-left: 25px;">
+            <li style="padding: 8px 0;">Đội ngũ tuyển dụng sẽ xem xét hồ sơ của bạn</li>
+            <li style="padding: 8px 0;">Nếu phù hợp, chúng tôi sẽ liên hệ để phỏng vấn</li>
+            <li style="padding: 8px 0;">Trao đổi về các điều khoản hợp tác</li>
+            <li style="padding: 8px 0;">Ký kết hợp đồng và bắt đầu công việc</li>
+          </ol>
+        </div>
+
+        <p style="font-size: 16px; line-height: 1.5; padding: 15px; background-color: rgba(93, 120, 79, 0.1); border-radius: 8px;">
+          Trong thời gian chờ đợi, bạn có thể tìm hiểu thêm về Glow qua website của chúng tôi.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top: 30px; text-align: center;">
+        <p style="color: #5d784f; font-weight: bold; margin-bottom: 15px;">Kết nối với chúng tôi</p>
+        <div style="margin-bottom: 20px;">
+          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.LINKEDIN}" 
+             style="display: inline-block; margin: 0 10px; padding: 8px 15px; background-color: #5d784f; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
+            LinkedIn
+          </a>
+          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.FACEBOOK}" 
+             style="display: inline-block; margin: 0 10px; padding: 8px 15px; background-color: #5d784f; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
+            Facebook
+          </a>
+          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" 
+             style="display: inline-block; margin: 0 10px; padding: 8px 15px; background-color: #5d784f; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
+            Website
+          </a>
+        </div>
+        <div style="border-top: 1px solid #e0e0e0; padding-top: 20px; margin-top: 20px;">
+          <p style="color: #666; font-size: 12px;">© ${new Date().getFullYear()} Glow. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Tạo template email cho Đối tác
+ */
+function createPartnerEmailBody(data) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+      <!-- Header with Logo -->
+      <div style="text-align: center; padding: 20px 0;">
+        <img src="${CONFIG.COMPANY_INFO.LOGO_URL}" alt="Glow Logo" style="max-width: 200px;">
+      </div>
+
+      <!-- Main Content -->
+      <div style="padding: 20px;">
+        <h2 style="color: #333; margin-bottom: 20px;">
+          &#x1F91D; Xác nhận đăng ký Đối tác
+        </h2>
+        
+        <p>Xin chào ${data.name},</p>
+        
+        <p>&#x2728; Cảm ơn bạn đã quan tâm đến chương trình Đối tác của Glow. Chúng tôi rất vui mừng về cơ hội hợp tác với bạn.</p>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+          <p><strong>&#x1F4CB; Thông tin của bạn:</strong></p>
+          <ul style="list-style: none; padding-left: 0;">
+            <li>&#x1F464; Họ và tên: ${data.name}</li>
+            <li>&#x1F4E7; Email: ${data.email}</li>
+            <li>&#x1F4F1; Số điện thoại: ${data.phone}</li>
+          </ul>
+
+          <p><strong>&#x1F680; Quy trình hợp tác:</strong></p>
+          <ol style="margin-left: 20px;">
+            <li>&#x1F4AC; Đội ngũ phát triển đối tác sẽ liên hệ với bạn</li>
+            <li>&#x1F4B8; Trao đổi về mô hình hợp tác và lợi ích</li>
+            <li>&#x1F4D1; Thảo luận về các điều khoản hợp tác</li>
+            <li>&#x1F58B; Ký kết hợp đồng đối tác</li>
+          </ol>
+        </div>
+
+        <p>&#x23F3; Trong thời gian chờ đợi, bạn có thể tham khảo thêm về các chương trình đối tác của Glow trên website của chúng tôi.</p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
+        <p style="margin-bottom: 15px;">&#x1F517; Kết nối với chúng tôi</p>
+        <div style="margin-bottom: 20px;">
+          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.LINKEDIN}" style="margin: 0 10px; color: #0077B5; text-decoration: none;">
+            &#x1F4BC; LinkedIn
+          </a>
+          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.FACEBOOK}" style="margin: 0 10px; color: #1877F2; text-decoration: none;">
+            &#x1F4F1; Facebook
+          </a>
+          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" style="margin: 0 10px; color: #333; text-decoration: none;">
+            &#x1F310; Website
+          </a>
+        </div>
+        <p style="color: #666; font-size: 12px;">© ${new Date().getFullYear()} Glow. All rights reserved.</p>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Gửi email dựa theo vai trò
+ */
+function sendEmails(data) {
+  try {
+    // Validate email configuration
+    if (!CONFIG.ADMIN_EMAIL || CONFIG.ADMIN_EMAIL === 'your-admin-email@example.com') {
+      throw new Error('Chưa cấu hình email admin');
+    }
+
+    // Validate data
+    if (!data || !data.email) {
+      throw new Error('Dữ liệu email không hợp lệ');
+    }
+
+    // Chọn template email dựa theo vai trò
+    const emailBody = data.selectedRole.toLowerCase().includes('kỹ thuật viên') 
+      ? createTechnicianEmailBody(data)
+      : createPartnerEmailBody(data);
+
+    // Chọn tiêu đề email dựa theo vai trò
+    const emailSubject = data.selectedRole.toLowerCase().includes('kỹ thuật viên')
+      ? 'Xác nhận đăng ký Kỹ thuật viên - Glow'
+      : 'Xác nhận đăng ký Đối tác - Glow';
+
+    // Gửi email cho người đăng ký
+    GmailApp.sendEmail(
+      data.email,
+      emailSubject,
+      'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
+      {
+        htmlBody: emailBody,
+        name: 'Glow Team'
+      }
+    );
+    console.log('Đã gửi email cho người dùng:', data.email);
+
+    // Gửi email cho admin
+    const adminEmailBody = createAdminEmailBody(data);
+    GmailApp.sendEmail(
+      CONFIG.ADMIN_EMAIL,
+      `Đăng ký mới: ${data.selectedRole} - ${data.name}`,
+      'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
+      {
+        htmlBody: adminEmailBody,
+        name: 'Glow Website Notification'
+      }
+    );
+    console.log('Đã gửi email cho admin');
+  } catch (error) {
+    console.error('Lỗi khi gửi email:', error);
+    throw new Error('Không thể gửi email: ' + error.message);
+  }
+}
+
+/**
+ * Tạo nội dung email cho admin
+ */
+function createAdminEmailBody(data) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #333;">Thông tin đăng ký mới</h2>
+      <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p><strong>Thời gian:</strong> ${new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</p>
+        <p><strong>Họ và tên:</strong> ${data.name}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Số điện thoại:</strong> ${data.phone}</p>
+        <p><strong>Vai trò:</strong> ${data.selectedRole}</p>
+        <p><strong>Đồng ý nhận marketing:</strong> ${data.agreedToMarketing ? 'Có' : 'Không'}</p>
+      </div>
+      <p>Vui lòng liên hệ với ứng viên trong thời gian sớm nhất.</p>
+    </div>
+  `;
+}
+
+/**
+ * Validate dữ liệu form
+ */
+function validateFormData(data) {
+  if (!data) throw new Error('Không có dữ liệu được gửi');
+  if (!data.name) throw new Error('Thiếu thông tin họ tên');
+  if (!data.email) throw new Error('Thiếu thông tin email');
+  if (!data.phone) throw new Error('Thiếu thông tin số điện thoại');
+  if (!data.selectedRole) throw new Error('Thiếu thông tin vai trò');
+}
+
+/**
+ * Lưu dữ liệu vào Google Spreadsheet
+ */
+function saveToSpreadsheet(data) {
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const sheet = ss.getActiveSheet();
+    const lastRow = sheet.getLastRow();
+    
+    const timestamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    
+    const rowData = [
+      timestamp,
+      data.name || '',
+      data.email || '',
+      data.phone || '',
+      data.selectedRole || '',
+      data.agreedToMarketing ? 'Có' : 'Không'
+    ];
+    
+    sheet.getRange(lastRow + 1, 1, 1, rowData.length).setValues([rowData]);
+    console.log('Đã lưu dữ liệu vào spreadsheet thành công');
+  } catch (error) {
+    console.error('Lỗi khi lưu vào spreadsheet:', error);
+    throw new Error('Không thể lưu dữ liệu vào spreadsheet: ' + error.message);
+  }
+}
+
+/**
+ * Thiết lập ban đầu cho spreadsheet
+ */
+function setupSpreadsheet() {
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const sheet = ss.getActiveSheet();
+    
+    const headers = [
+      'Thời gian',
+      'Họ và tên',
+      'Email',
+      'Số điện thoại',
+      'Vai trò',
+      'Đồng ý nhận marketing'
+    ];
+    
+    // Set headers
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // Format headers
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setFontWeight('bold')
+               .setBackground('#E8EAED')
+               .setHorizontalAlignment('center');
+    
+    // Freeze header row
+    sheet.setFrozenRows(1);
+    
+    // Auto-resize columns
+    sheet.autoResizeColumns(1, headers.length);
+    
+    // Add data validation and formatting
+    sheet.getRange(2, 1, 999, headers.length)
+         .setHorizontalAlignment('left')
+         .setWrap(true);
+    
+    console.log('Đã thiết lập spreadsheet thành công');
+    return 'Thiết lập spreadsheet thành công!';
+  } catch (error) {
+    console.error('Lỗi khi thiết lập spreadsheet:', error);
+    throw new Error('Không thể thiết lập spreadsheet: ' + error.message);
+  }
+}
+
+/**
+ * Test cấu hình
+ */
+function testConfiguration() {
+  try {
+    // Kiểm tra cấu hình admin email
+    if (!CONFIG.ADMIN_EMAIL || CONFIG.ADMIN_EMAIL === 'your-admin-email@example.com') {
+      throw new Error('Vui lòng cấu hình ADMIN_EMAIL trước khi test');
+    }
+
+    // Tạo test data
+    const testData = {
+      name: 'Người Test',
+      email: 'ducthang.tran39@gmail.com',
+      phone: '0123456789',
+      selectedRole: 'Kỹ thuật viên',
+      agreedToMarketing: true
+    };
+
+    console.log('Test data:', JSON.stringify(testData));
+
+    // Test lưu vào spreadsheet
+    saveToSpreadsheet(testData);
+    console.log('✓ Lưu spreadsheet thành công');
+    
+    // Test gửi email
+    sendEmails(testData);
+    console.log('✓ Gửi email thành công');
+    
+    return 'Kiểm tra cấu hình thành công!';
+  } catch (error) {
+    console.error('Lỗi khi test:', error);
+    return `Lỗi: ${error.toString()}`;
+  }
+}
+
+/**
+ * Test cả hai vai trò
+ */
+function testBothRoles() {
+  const testDataTechnician = {
+    name: 'Người Test KTV',
+    email: 'test@example.com',
+    phone: '0123456789',
+    selectedRole: 'Kỹ thuật viên',
+    agreedToMarketing: true
+  };
+
+  const testDataPartner = {
+    name: 'Người Test Đối tác',
+    email: 'test@example.com',
+    phone: '0123456789',
+    selectedRole: 'Đối tác',
+    agreedToMarketing: true
+  };
+
+  try {
+    console.log('Test gửi email Kỹ thuật viên:');
+    sendEmails(testDataTechnician);
+    
+    console.log('\nTest gửi email Đối tác:');
+    sendEmails(testDataPartner);
+    
+    return 'Test thành công cả hai vai trò!';
+  } catch (error) {
+    console.error('Lỗi khi test:', error);
+    return `Lỗi: ${error.toString()}`;
+  }
+}
+
+/**
+ * Test email với template mới
+ */
+function testEmailTemplate() {
+  const testData = {
+    name: 'Người Test',
+    email: 'test@example.com',
+    phone: '0123456789',
+    selectedRole: 'Kỹ thuật viên',
+    agreedToMarketing: true
+  };
+
+  try {
+    const emailBody = createTechnicianEmailBody(testData);
+    
+    GmailApp.sendEmail(
+      testData.email,
+      'Test Email Template - Glow',
+      'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
+      {
+        htmlBody: emailBody,
+        name: 'Glow Team'
+      }
+    );
+    
+    console.log('Test email sent successfully');
+    return 'Gửi email test thành công!';
+  } catch (error) {
+    console.error('Error sending test email:', error);
+    return `Lỗi: ${error.toString()}`;
+  }
+}
+
+/**
+ * Test email với logo
+ */
+function testEmailWithLogo() {
+  const testData = {
+    name: 'Người Test',
+    email: 'test@example.com',
+    phone: '0123456789',
+    selectedRole: 'Kỹ thuật viên',
+    agreedToMarketing: true
+  };
+  
+  try {
+    const emailBody = createTechnicianEmailBody(testData);
+    console.log('Email template with logo generated successfully');
+    
+    // Test gửi email
+    GmailApp.sendEmail(
+      testData.email,
+      'Test Email với Logo - Glow',
+      'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
+      {
+        htmlBody: emailBody,
+        name: 'Glow Team'
+      }
+    );
+    
+    console.log('Test email sent successfully');
+  } catch (error) {
+    console.error('Error testing email with logo:', error);
+    throw error;
+  }
+}
+
+/**
+ * Function để kiểm tra và set quyền truy cập cho logo
+ */
+function setupLogoPermissions() {
+  try {
+    const fileId = CONFIG.COMPANY_INFO.LOGO_FILE_ID;
+    const file = DriveApp.getFileById(fileId);
+    
+    // Set quyền truy cập cho file
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    
+    console.log('Logo permissions set successfully');
+    console.log('Logo URL:', getLogoUrl());
+    return 'Logo setup completed successfully!';
+  } catch (error) {
+    console.error('Error setting up logo:', error);
+    return `Error: ${error.toString()}`;
+  }
+}
+
+/**
+ * Function để test URL logo
+ */
+function testLogoUrl() {
+  const logoUrl = getLogoUrl();
+  console.log('Logo URL:', logoUrl);
+  
+  // Test gửi email với logo
+  const testData = {
+    name: 'Người Test',
+    email: 'test@example.com',
+    phone: '0123456789',
+    selectedRole: 'Kỹ thuật viên',
+    agreedToMarketing: true
+  };
+  
+  try {
+    const emailBody = createTechnicianEmailBody(testData);
+    GmailApp.sendEmail(
+      testData.email,
+      'Test Logo in Email - Glow',
+      'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
+      {
+        htmlBody: emailBody,
+        name: 'Glow Team'
+      }
+    );
+    return 'Test email sent successfully!';
+  } catch (error) {
+    console.error('Error:', error);
+    return `Error: ${error.toString()}`;
+  }
+}
+
+function getBase64FromImageUrl(url) {
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = function() {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    const base64 = canvas.toDataURL("image/png");
+    console.log(base64);
+  };
+  img.src = url;
+}
+
+// Sử dụng
+getBase64FromImageUrl('URL_LOGO_GLOW');
+
+function getLogoUrlAlternative() {
+  const fileId = CONFIG.COMPANY_INFO.LOGO_FILE_ID;
+  return `https://lh3.googleusercontent.com/d/${fileId}`;
+}
