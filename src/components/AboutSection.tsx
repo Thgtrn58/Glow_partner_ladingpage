@@ -126,7 +126,8 @@ const AboutSection: React.FC = () => {
         <div className={`max-w-4xl mx-auto mb-6 transition-all duration-1000 delay-200 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="text-center">
             <p className="text-lg text-glow-500 leading-relaxed">
-              <span className="text-glow-600 font-semibold">Glow</span> là ứng dụng đa dịch vụ chăm sóc sức khỏe và sắc đẹp hàng đầu Việt Nam
+              <span className="text-glow-600 font-semibold">Glow</span>  là ứng dụng đặt lịch massage tận nơi & chăm sóc sức khỏe lành mạnh
+              hàng đầu Việt Nam
             </p>
           </div>
         </div>
@@ -136,10 +137,7 @@ const AboutSection: React.FC = () => {
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-glow-100/50 mb-8">
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-lg text-glow-500 leading-relaxed mb-5">
-                Glow không chỉ là một nền tảng, mà là một 
-                <span className="text-glow-600 font-bold"> hệ sinh thái</span> - 
-                nơi kết nối cộng đồng, gia tăng giá trị bền vững cho các đối tác 
-                và góp phần giúp hàng triệu người Việt chăm sóc bản thân hiệu quả.
+              Glow là nền tảng kết nối Khách hàng có nhu cầu massage lành mạnh và Kỹ thuật viên uy tín - tận tâm - chuyên nghiệp, góp phần giúp hàng triệu người Việt chăm sóc bản thân hiệu quả.
               </p>
               
               <div className="border-t border-glow-200 pt-5">

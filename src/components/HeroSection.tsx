@@ -135,7 +135,7 @@ const HeroSection: React.FC = () => {
             
             <div className={`transition-all duration-1000 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <p className="text-lg sm:text-xl text-gray-700 mb-6 max-w-5xl mx-auto leading-relaxed px-4">
-                Nền tảng kết nối hàng đầu Việt Nam dành cho các dịch vụ chăm sóc sức khỏe và sắc đẹp
+              Nền tảng kết nối hàng đầu Việt Nam dành cho dịch vụ massage & chăm sóc sức khỏe
               </p>
               
               <div className="flex flex-row gap-2 sm:gap-4 justify-center items-center mb-8 sm:mb-10 px-4">
@@ -143,7 +143,7 @@ const HeroSection: React.FC = () => {
                   onClick={handleScrollToCTA}
                   className="group bg-glow-600 hover:bg-glow-700 text-white px-4 py-2 sm:px-8 sm:py-4 rounded-full font-semibold text-sm sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-1 sm:space-x-2 flex-1 sm:flex-none justify-center"
                 >
-                  <span className="whitespace-nowrap">Bắt đầu ngay</span>
+                  <span className="whitespace-nowrap">Trở thành KTV </span>
                   <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <a 
