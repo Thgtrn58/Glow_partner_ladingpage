@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Role } from './RoleSelection';
 import { submitToGoogleAppsScript } from '../api/forms';
 
 interface FormData {
   name: string;
-  email: string;
+  email: string; // Still string type but validation makes it optional
   phone: string;
   agreedToMarketing: boolean;
 }
@@ -15,11 +14,7 @@ interface FormErrors {
   phone?: string;
 }
 
-interface LeadFormProps {
-  selectedRole: Role;
-}
-
-const LeadForm: React.FC<LeadFormProps> = ({ selectedRole }) => {
+const LeadForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -38,9 +33,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ selectedRole }) => {
       newErrors.name = 'Họ và tên không được để trống';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email không được để trống';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Email không đúng định dạng';
     }
 
@@ -64,7 +57,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ selectedRole }) => {
     try {
       await submitToGoogleAppsScript({
         ...formData,
-        selectedRole,
+        selectedRole: 'technician',
       });
       
       setShowSuccess(true);
@@ -121,7 +114,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ selectedRole }) => {
         <div>
           <input
             type="email"
-            placeholder="Email *"
+            placeholder="Email (không bắt buộc)"
             value={formData.email}
             onChange={(e) => handleInputChange('email', e.target.value)}
                       className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${

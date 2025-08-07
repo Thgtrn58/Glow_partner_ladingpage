@@ -122,18 +122,9 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Description */}
-        <div className={`max-w-4xl mx-auto mb-6 transition-all duration-1000 delay-200 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="text-center">
-            <p className="text-lg text-glow-500 leading-relaxed">
-              <span className="text-glow-600 font-semibold">Glow</span>  là ứng dụng đặt lịch massage tận nơi & chăm sóc sức khỏe lành mạnh
-              hàng đầu Việt Nam
-            </p>
-          </div>
-        </div>
 
         {/* Company Vision */}
-        <div className={`transition-all duration-1000 delay-400 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`transition-all duration-1000 delay-200 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-glow-100/50 mb-8">
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-lg text-glow-500 leading-relaxed mb-5">
@@ -150,7 +141,7 @@ const AboutSection: React.FC = () => {
         </div>
 
         {/* Roadmap Section */}
-        <div className={`transition-all duration-1000 delay-800 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`transition-all duration-1000 delay-400 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="text-center mb-6">
             <h3 className="text-2xl md:text-4xl font-bold text-glow-500 mb-2">
               Mục tiêu của chúng tôi
