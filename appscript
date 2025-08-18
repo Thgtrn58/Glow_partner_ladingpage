@@ -10,138 +10,246 @@ const CONFIG = {
       FACEBOOK: 'https://www.facebook.com/glowvietnam',
       WEBSITE: 'https://glowvietnam.com'
     }
-  }
+  },
+  TEMPLATE_ID: "477985",
+  CODE_VERIFYER: "idTywBLDKAI1SPIypFftWmuOOLMAq9rcfx5XDdLNFkpuMt3Z2rzrMNdTdE_Zy7YC",
+  APP_ID: "2988166152241541433",
+  AUTH_CODE: "jEg_4Gb6U1QZeO8wA1XU1hA-eYT2C7O9_x7G7qGnBIR8kzycL5mZ3EAInZ1l2mSNduZVFo8pBXMRfkeT5JGzA8xMnG0ILoerfjZSA55T4mNitQmJQavp6ERT-pnR5dbFdV7x5aPnEokrvl9WK3u7A9JjrbzzPm1h_u7qLsCV1LJjYz0_60WO0zNE-KW3EMqJzVh-E6mV1WhZfyWN4a1f4foxf2vyP5vixuFADZb611BM-BbX1nDuTCUyeqT6AnTUcVpW65WriHFbddPbINZvlFB29xvmNUkVWeeRuv4yZkGut66TKtLdtcBBYCpUHQYM-3vTXJk9dSZtQ2-gO9hxnuDfEfO5zjt5a2XYi7saqeViDcV5MIRpAtOM0qHEA0",
+  SECRET_KEY: "JFRnDLDSU0lKEhMbCIVD"
 };
+
+const PROPERTY = PropertiesService.getScriptProperties(); 
 
 /**
  * Tạo template email cho Kỹ thuật viên
  */
 function createTechnicianEmailBody(data) {
-  return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-      <!-- Header with Logo and Background -->
-      <div style="text-align: center; padding: 20px 0; background-color: #5d784f; border-radius: 8px 8px 0 0;">
-        <img src="${CONFIG.COMPANY_INFO.LOGO_URL}" 
-             alt="Glow Logo" 
-             style="max-width: 150px; height: auto;">
-      </div>
-
-      <!-- Main Content -->
-      <div style="padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px;">
-        <h2 style="color: #5d784f; margin-bottom: 20px; font-size: 24px;">
-          Xác nhận đăng ký thông tin Kỹ thuật viên
-        </h2>
-        
-        <p style="font-size: 16px; line-height: 1.5;">Xin chào <strong style="color: #5d784f;">${data.name}</strong>,</p>
-        
-        <p style="font-size: 16px; line-height: 1.5;">Cảm ơn bạn đã quan tâm đến vị trí Kỹ thuật viên tại Glow. Chúng tôi đã nhận được thông tin đăng ký của bạn.</p>
-
-        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #5d784f;">
-          <p style="color: #5d784f; font-weight: bold; margin-bottom: 15px;">Thông tin của bạn:</p>
-          <ul style="list-style: none; padding-left: 0; margin: 0;">
-            <li style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;"><strong>Họ và tên:</strong> ${data.name}</li>
-            <li style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;"><strong>Email:</strong> ${data.email}</li>
-            <li style="padding: 8px 0;"><strong>Số điện thoại:</strong> ${data.phone}</li>
-          </ul>
-
-          <p style="color: #5d784f; font-weight: bold; margin: 20px 0 15px;">Các bước tiếp theo:</p>
-          <ol style="margin: 0; padding-left: 25px;">
-            <li style="padding: 8px 0;">Đội ngũ tuyển dụng sẽ xem xét hồ sơ của bạn</li>
-            <li style="padding: 8px 0;">Nếu phù hợp, chúng tôi sẽ liên hệ để phỏng vấn</li>
-            <li style="padding: 8px 0;">Trao đổi về các điều khoản hợp tác</li>
-            <li style="padding: 8px 0;">Ký kết hợp đồng và bắt đầu công việc</li>
-          </ol>
-        </div>
-
-        <p style="font-size: 16px; line-height: 1.5; padding: 15px; background-color: rgba(93, 120, 79, 0.1); border-radius: 8px;">
-          Trong thời gian chờ đợi, bạn có thể tìm hiểu thêm về Glow qua website của chúng tôi.
-        </p>
-      </div>
-
-      <!-- Footer -->
-      <div style="margin-top: 30px; text-align: center;">
-        <p style="color: #5d784f; font-weight: bold; margin-bottom: 15px;">Kết nối với chúng tôi</p>
-        <div style="margin-bottom: 20px;">
-          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.LINKEDIN}" 
-             style="display: inline-block; margin: 0 10px; padding: 8px 15px; background-color: #5d784f; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
-            LinkedIn
-          </a>
-          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.FACEBOOK}" 
-             style="display: inline-block; margin: 0 10px; padding: 8px 15px; background-color: #5d784f; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
-            Facebook
-          </a>
-          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" 
-             style="display: inline-block; margin: 0 10px; padding: 8px 15px; background-color: #5d784f; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
-            Website
-          </a>
-        </div>
-        <div style="border-top: 1px solid #e0e0e0; padding-top: 20px; margin-top: 20px;">
-          <p style="color: #666; font-size: 12px;">© ${new Date().getFullYear()} Glow. All rights reserved.</p>
-        </div>
-      </div>
-    </div>
-  `;
+  return `<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glow - Xác nhận đăng ký Kỹ thuật viên</title>
+<style>
+body, #bodyTable { background-color: rgb(244, 244, 244); }
+.mceText, .mcnTextContent, .mceLabel { font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; }
+.mceText, .mcnTextContent, .mceLabel { color: rgb(0, 0, 0); }
+.mceText h1 { margin-bottom: 0px; }
+.mceText p { margin-bottom: 0px; }
+.mceText label { margin-bottom: 0px; }
+.mceText input { margin-bottom: 0px; }
+.mceText h1 { margin-bottom: 0px; }
+.mceText p { margin-bottom: 0px; }
+.mceText label { margin-bottom: 0px; }
+.mceText input { margin-bottom: 0px; }
+.mceText p, .mcnTextContent p { color: rgb(0, 0, 0); font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5; mso-line-height-alt: 150%; text-align: center; letter-spacing: 0px; direction: ltr; margin: 0px; }
+.mceText h1, .mcnTextContent h1 { color: rgb(0, 0, 0); font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; font-size: 31px; font-weight: bold; line-height: 1.5; mso-line-height-alt: 150%; text-align: center; letter-spacing: 0px; direction: ltr; }
+.mceText a, .mcnTextContent a { color: rgb(0, 0, 0); font-style: normal; font-weight: normal; text-decoration: underline; direction: ltr; }
+@media only screen and (max-width: 480px) {
+  .mceText p { margin: 0px; font-size: 16px !important; line-height: 1.5 !important; mso-line-height-alt: 150%; }
+  .mceText h1 { font-size: 31px !important; line-height: 1.5 !important; mso-line-height-alt: 150%; }
+  .bodyCell { padding-left: 16px !important; padding-right: 16px !important; }
+}
+</style>
+</head>
+<body>
+<center>
+<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background-color: rgb(244, 244, 244);">
+<tbody><tr>
+<td class="bodyCell" align="center" valign="top">
+<table id="root" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr><td style="background-color:transparent" valign="top" align="center" class="mceSectionHeader">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px" role="presentation">
+<tbody><tr><td style="background-color:#ffffff" valign="top" class="mceWrapperInner">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr class="mceRow"><td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr><td style="padding-top:12px;padding-bottom:12px;padding-right:48px;padding-left:48px" valign="top" class="mceImageBlockContainer" align="center">
+<a href="https://glowvietnam.com" style="display:block" target="_blank">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate;margin:0;vertical-align:top;max-width:130px;width:100%;height:auto" role="presentation">
+<tbody><tr><td style="border:0;border-radius:0;margin:0" valign="top">
+<img alt="Glow Logo" src="${CONFIG.COMPANY_INFO.LOGO_URL}" width="130" height="auto" style="display:block;max-width:100%;height:auto;border-radius:0" class="mceLogo">
+</td></tr></tbody></table></a>
+</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody>
+<tbody><tr><td style="background-color:transparent" valign="top" align="center" class="mceSectionBody">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px" role="presentation">
+<tbody><tr><td style="background-color:#ffffff" valign="top" class="mceWrapperInner">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr class="mceRow"><td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr><td style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0" valign="top">
+<table width="100%" style="border:0;border-radius:0;border-collapse:separate">
+<tbody><tr><td style="padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px" class="mceTextBlockContainer">
+<div class="mceText" style="width:100%">
+<h1>Xác nhận đăng ký Kỹ thuật viên</h1>
+<p>Xin chào <strong>${data.name}</strong>,</p>
+<p>Cảm ơn bạn đã quan tâm đến vị trí Kỹ thuật viên tại Glow. Chúng tôi đã nhận được thông tin đăng ký của bạn.</p>
+<p style="text-align: center;"><strong>Thông tin của bạn:</strong></p>
+<p style="text-align: center;">Họ và tên: ${data.name}</p>
+<p style="text-align: center;">Email: ${data.email}</p>
+<p style="text-align: center;">Số điện thoại: ${data.phone}</p>
+<p style="text-align: center;"><br></p>
+<p style="text-align: center;"><strong>Các bước tiếp theo:</strong></p>
+<p style="text-align: center;">1. Đội ngũ tuyển dụng sẽ xem xét hồ sơ của bạn</p>
+<p style="text-align: center;">2. Nếu phù hợp, chúng tôi sẽ liên hệ để phỏng vấn</p>
+<p style="text-align: center;">3. Trao đổi về các điều khoản hợp tác</p>
+<p style="text-align: center;">4. Ký kết hợp đồng và bắt đầu công việc</p>
+<p style="text-align: center;"><br></p>
+<p style="text-align: center;">Trong thời gian chờ đợi, bạn có thể tìm hiểu thêm về Glow qua website của chúng tôi.</p>
+<p style="text-align: center;" class="last-child">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" target="_blank">${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}</a>
+</p>
+</div></td></tr></tbody></table></td></tr>
+<tr><td style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:24px;padding-left:24px" valign="top" class="mceDividerBlockContainer">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent;width:100%" role="presentation" class="mceDividerContainer">
+<tbody><tr><td style="min-width:100%;border-top-width:2px;border-top-style:solid;border-top-color:#000000;line-height:0;font-size:0" valign="top" class="mceDividerBlock"> </td></tr></tbody></table></td></tr>
+<tr><td style="padding-top:12px;padding-bottom:12px;padding-right:0;padding-left:0" valign="top" class="mceLayoutContainer">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr class="mceRow"><td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+<table border="0" cellpadding="0" cellspacing="24" width="100%" role="presentation">
+<tbody><tr><td valign="top" class="mceColumn" colspan="12" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr><td valign="top" class="mceSocialFollowBlockContainer">
+<table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="mceSocialFollowBlock">
+<tbody><tr><td valign="middle" align="center">
+<table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;float:left" role="presentation">
+<tbody><tr><td style="padding-top:3px;padding-bottom:3px;padding-left:12px;padding-right:12px" valign="top" class="mceSocialFollowIcon" align="center" width="40">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.FACEBOOK}" target="_blank" rel="noreferrer">
+<img class="mceSocialFollowImage" width="40" height="40" alt="Facebook icon" src="https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/facebook-filled-dark-40.png">
+</a></td></tr></tbody></table>
+<table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;float:left" role="presentation">
+<tbody><tr><td style="padding-top:3px;padding-bottom:3px;padding-left:12px;padding-right:12px" valign="top" class="mceSocialFollowIcon" align="center" width="40">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.LINKEDIN}" target="_blank" rel="noreferrer">
+<img class="mceSocialFollowImage" width="40" height="40" alt="LinkedIn icon" src="https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/linkedin-filled-dark-40.png">
+</a></td></tr></tbody></table>
+<table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;float:left" role="presentation">
+<tbody><tr><td style="padding-top:3px;padding-bottom:3px;padding-left:12px;padding-right:12px" valign="top" class="mceSocialFollowIcon" align="center" width="40">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" target="_blank" rel="noreferrer">
+<img class="mceSocialFollowImage" width="40" height="40" alt="Website icon" src="https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/website-filled-dark-40.png">
+</a></td></tr></tbody></table>
+</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>
+</td>
+</tr>
+</tbody></table>
+</center>
+</body></html>`;
 }
 
 /**
  * Tạo template email cho Đối tác
  */
 function createPartnerEmailBody(data) {
-  return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-      <!-- Header with Logo -->
-      <div style="text-align: center; padding: 20px 0;">
-        <img src="${CONFIG.COMPANY_INFO.LOGO_URL}" alt="Glow Logo" style="max-width: 200px;">
-      </div>
-
-      <!-- Main Content -->
-      <div style="padding: 20px;">
-        <h2 style="color: #333; margin-bottom: 20px;">
-          &#x1F91D; Xác nhận đăng ký Đối tác
-        </h2>
-        
-        <p>Xin chào ${data.name},</p>
-        
-        <p>&#x2728; Cảm ơn bạn đã quan tâm đến chương trình Đối tác của Glow. Chúng tôi rất vui mừng về cơ hội hợp tác với bạn.</p>
-
-        <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
-          <p><strong>&#x1F4CB; Thông tin của bạn:</strong></p>
-          <ul style="list-style: none; padding-left: 0;">
-            <li>&#x1F464; Họ và tên: ${data.name}</li>
-            <li>&#x1F4E7; Email: ${data.email}</li>
-            <li>&#x1F4F1; Số điện thoại: ${data.phone}</li>
-          </ul>
-
-          <p><strong>&#x1F680; Quy trình hợp tác:</strong></p>
-          <ol style="margin-left: 20px;">
-            <li>&#x1F4AC; Đội ngũ phát triển đối tác sẽ liên hệ với bạn</li>
-            <li>&#x1F4B8; Trao đổi về mô hình hợp tác và lợi ích</li>
-            <li>&#x1F4D1; Thảo luận về các điều khoản hợp tác</li>
-            <li>&#x1F58B; Ký kết hợp đồng đối tác</li>
-          </ol>
-        </div>
-
-        <p>&#x23F3; Trong thời gian chờ đợi, bạn có thể tham khảo thêm về các chương trình đối tác của Glow trên website của chúng tôi.</p>
-      </div>
-
-      <!-- Footer -->
-      <div style="background: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
-        <p style="margin-bottom: 15px;">&#x1F517; Kết nối với chúng tôi</p>
-        <div style="margin-bottom: 20px;">
-          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.LINKEDIN}" style="margin: 0 10px; color: #0077B5; text-decoration: none;">
-            &#x1F4BC; LinkedIn
-          </a>
-          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.FACEBOOK}" style="margin: 0 10px; color: #1877F2; text-decoration: none;">
-            &#x1F4F1; Facebook
-          </a>
-          <a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" style="margin: 0 10px; color: #333; text-decoration: none;">
-            &#x1F310; Website
-          </a>
-        </div>
-        <p style="color: #666; font-size: 12px;">© ${new Date().getFullYear()} Glow. All rights reserved.</p>
-      </div>
-    </div>
-  `;
+  return `<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glow - Xác nhận đăng ký Đối tác</title>
+<style>
+body, #bodyTable { background-color: rgb(244, 244, 244); }
+.mceText, .mcnTextContent, .mceLabel { font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; }
+.mceText, .mcnTextContent, .mceLabel { color: rgb(0, 0, 0); }
+.mceText h1 { margin-bottom: 0px; }
+.mceText p { margin-bottom: 0px; }
+.mceText label { margin-bottom: 0px; }
+.mceText input { margin-bottom: 0px; }
+.mceText h1 { margin-bottom: 0px; }
+.mceText p { margin-bottom: 0px; }
+.mceText label { margin-bottom: 0px; }
+.mceText input { margin-bottom: 0px; }
+.mceText p, .mcnTextContent p { color: rgb(0, 0, 0); font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5; mso-line-height-alt: 150%; text-align: center; letter-spacing: 0px; direction: ltr; margin: 0px; }
+.mceText h1, .mcnTextContent h1 { color: rgb(0, 0, 0); font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; font-size: 31px; font-weight: bold; line-height: 1.5; mso-line-height-alt: 150%; text-align: center; letter-spacing: 0px; direction: ltr; }
+.mceText a, .mcnTextContent a { color: rgb(0, 0, 0); font-style: normal; font-weight: normal; text-decoration: underline; direction: ltr; }
+@media only screen and (max-width: 480px) {
+  .mceText p { margin: 0px; font-size: 16px !important; line-height: 1.5 !important; mso-line-height-alt: 150%; }
+  .mceText h1 { font-size: 31px !important; line-height: 1.5 !important; mso-line-height-alt: 150%; }
+  .bodyCell { padding-left: 16px !important; padding-right: 16px !important; }
+}
+</style>
+</head>
+<body>
+<center>
+<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background-color: rgb(244, 244, 244);">
+<tbody><tr>
+<td class="bodyCell" align="center" valign="top">
+<table id="root" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr><td style="background-color:transparent" valign="top" align="center" class="mceSectionHeader">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px" role="presentation">
+<tbody><tr><td style="background-color:#ffffff" valign="top" class="mceWrapperInner">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr class="mceRow"><td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr><td style="padding-top:12px;padding-bottom:12px;padding-right:48px;padding-left:48px" valign="top" class="mceImageBlockContainer" align="center">
+<a href="https://glowvietnam.com" style="display:block" target="_blank">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate;margin:0;vertical-align:top;max-width:130px;width:100%;height:auto" role="presentation">
+<tbody><tr><td style="border:0;border-radius:0;margin:0" valign="top">
+<img alt="Glow Logo" src="${CONFIG.COMPANY_INFO.LOGO_URL}" width="130" height="auto" style="display:block;max-width:100%;height:auto;border-radius:0" class="mceLogo">
+</td></tr></tbody></table></a>
+</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody>
+<tbody><tr><td style="background-color:transparent" valign="top" align="center" class="mceSectionBody">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px" role="presentation">
+<tbody><tr><td style="background-color:#ffffff" valign="top" class="mceWrapperInner">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr class="mceRow"><td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr><td style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0" valign="top">
+<table width="100%" style="border:0;border-radius:0;border-collapse:separate">
+<tbody><tr><td style="padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px" class="mceTextBlockContainer">
+<div class="mceText" style="width:100%">
+<h1>Xác nhận đăng ký Đối tác</h1>
+<p>Xin chào <strong>${data.name}</strong>,</p>
+<p>Cảm ơn bạn đã quan tâm đến chương trình Đối tác của Glow. Chúng tôi rất vui mừng về cơ hội hợp tác với bạn.</p>
+<p style="text-align: center;"><strong>Thông tin của bạn:</strong></p>
+<p style="text-align: center;">Họ và tên: ${data.name}</p>
+<p style="text-align: center;">Email: ${data.email}</p>
+<p style="text-align: center;">Số điện thoại: ${data.phone}</p>
+<p style="text-align: center;"><br></p>
+<p style="text-align: center;"><strong>Quy trình hợp tác:</strong></p>
+<p style="text-align: center;">1. Đội ngũ phát triển đối tác sẽ liên hệ với bạn</p>
+<p style="text-align: center;">2. Trao đổi về mô hình hợp tác và lợi ích</p>
+<p style="text-align: center;">3. Thảo luận về các điều khoản hợp tác</p>
+<p style="text-align: center;">4. Ký kết hợp đồng đối tác</p>
+<p style="text-align: center;"><br></p>
+<p style="text-align: center;">Trong thời gian chờ đợi, bạn có thể tham khảo thêm về các chương trình đối tác của Glow trên website của chúng tôi.</p>
+<p style="text-align: center;" class="last-child">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" target="_blank">${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}</a>
+</p>
+</div></td></tr></tbody></table></td></tr>
+<tr><td style="background-color:transparent;padding-top:20px;padding-bottom:20px;padding-right:24px;padding-left:24px" valign="top" class="mceDividerBlockContainer">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent;width:100%" role="presentation" class="mceDividerContainer">
+<tbody><tr><td style="min-width:100%;border-top-width:2px;border-top-style:solid;border-top-color:#000000;line-height:0;font-size:0" valign="top" class="mceDividerBlock"> </td></tr></tbody></table></td></tr>
+<tr><td style="padding-top:12px;padding-bottom:12px;padding-right:0;padding-left:0" valign="top" class="mceLayoutContainer">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr class="mceRow"><td style="background-position:center;background-repeat:no-repeat;background-size:cover" valign="top">
+<table border="0" cellpadding="0" cellspacing="24" width="100%" role="presentation">
+<tbody><tr><td valign="top" class="mceColumn" colspan="12" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tbody><tr><td valign="top" class="mceSocialFollowBlockContainer">
+<table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" class="mceSocialFollowBlock">
+<tbody><tr><td valign="middle" align="center">
+<table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;float:left" role="presentation">
+<tbody><tr><td style="padding-top:3px;padding-bottom:3px;padding-left:12px;padding-right:12px" valign="top" class="mceSocialFollowIcon" align="center" width="40">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.FACEBOOK}" target="_blank" rel="noreferrer">
+<img class="mceSocialFollowImage" width="40" height="40" alt="Facebook icon" src="https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/facebook-filled-dark-40.png">
+</a></td></tr></tbody></table>
+<table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;float:left" role="presentation">
+<tbody><tr><td style="padding-top:3px;padding-bottom:3px;padding-left:12px;padding-right:12px" valign="top" class="mceSocialFollowIcon" align="center" width="40">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.LINKEDIN}" target="_blank" rel="noreferrer">
+<img class="mceSocialFollowImage" width="40" height="40" alt="LinkedIn icon" src="https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/linkedin-filled-dark-40.png">
+</a></td></tr></tbody></table>
+<table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;float:left" role="presentation">
+<tbody><tr><td style="padding-top:3px;padding-bottom:3px;padding-left:12px;padding-right:12px" valign="top" class="mceSocialFollowIcon" align="center" width="40">
+<a href="${CONFIG.COMPANY_INFO.SOCIAL_LINKS.WEBSITE}" target="_blank" rel="noreferrer">
+<img class="mceSocialFollowImage" width="40" height="40" alt="Website icon" src="https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/website-filled-dark-40.png">
+</a></td></tr></tbody></table>
+</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>
+</td>
+</tr>
+</tbody></table>
+</center>
+</body></html>`;
 }
 
 /**
@@ -239,7 +347,7 @@ function saveToSpreadsheet(data) {
     const sheet = ss.getActiveSheet();
     const lastRow = sheet.getLastRow();
     
-    const timestamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    const timestamp = new Date().toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
     
     const rowData = [
       timestamp,
@@ -317,7 +425,7 @@ function testConfiguration() {
     const testData = {
       name: 'Người Test',
       email: 'ducthang.tran39@gmail.com',
-      phone: '0123456789',
+      phone: '0369940209',
       selectedRole: 'Kỹ thuật viên',
       agreedToMarketing: true
     };
@@ -325,13 +433,17 @@ function testConfiguration() {
     console.log('Test data:', JSON.stringify(testData));
 
     // Test lưu vào spreadsheet
-    saveToSpreadsheet(testData);
-    console.log('✓ Lưu spreadsheet thành công');
+    // saveToSpreadsheet(testData);
+    // console.log('✓ Lưu spreadsheet thành công');
     
-    // Test gửi email
-    sendEmails(testData);
-    console.log('✓ Gửi email thành công');
-    
+    // // Test gửi email
+    // sendEmails(testData);
+    // console.log('✓ Gửi email thành công');
+
+    //Test send zns
+    znsSender(testData);
+    console.log('✓ Gửi ZNS thành công');
+
     return 'Kiểm tra cấu hình thành công!';
   } catch (error) {
     console.error('Lỗi khi test:', error);
@@ -510,9 +622,217 @@ function getBase64FromImageUrl(url) {
 }
 
 // Sử dụng
-getBase64FromImageUrl('URL_LOGO_GLOW');
+// getBase64FromImageUrl('URL_LOGO_GLOW');
 
 function getLogoUrlAlternative() {
   const fileId = CONFIG.COMPANY_INFO.LOGO_FILE_ID;
   return `https://lh3.googleusercontent.com/d/${fileId}`;
+}
+
+function znsSender(data) {
+  let url = "https://business.openapi.zalo.me/message/template";
+
+  let access_token = PROPERTY.getProperty("zns_access_token");
+  if(!access_token) {
+    access_token = refreshToken();
+    if(!access_token) throw "Init access_token not found";
+  }
+
+  let payload = {
+    // mode: "development",
+    phone: standardlizeVNPhone(data.phone),
+    template_id: CONFIG.TEMPLATE_ID,
+    template_data: {
+        name: data.name,
+        date_and_time: standardlizeTime(new Date()),
+        email: data.email,
+        phone_number: data.phone
+    }
+  };
+  Logger.log(payload)
+  const res = UrlFetchApp.fetch(url, {
+    method: "post",
+    contentType: "application/json",
+    headers: {
+      access_token: access_token,
+    },
+    payload: JSON.stringify(payload)
+  });
+
+  console.log(res.getContentText());
+  if(res.error == -124 || res.error == -126) {
+    access_token = refreshToken();
+    if(!access_token) throw "refresh_token_expired";
+    if(access_token) {
+      res = UrlFetchApp.fetch(url, {
+        method: "post",
+        contentType: "application/json",
+        headers: {
+          access_token: access_token,
+        },
+        payload: JSON.stringify(payload)
+      });
+    }
+  }
+}
+
+function getInitAccessToken() {
+  let url = "https://oauth.zaloapp.com/v4/oa/access_token";
+  try {
+    let payload = {
+      app_id: CONFIG.APP_ID,
+      grant_type: 'authorization_code',
+      code: CONFIG.AUTH_CODE,
+    }
+    let headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Secret_key": CONFIG.SECRET_KEY
+    }
+    const formData = Object.entries(payload)
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .join("&");
+
+    const options = {
+      method: 'post',
+      payload: formData,
+      muteHttpExceptions: true,
+      headers: headers
+    };
+    Logger.log(options);
+    let res = UrlFetchApp.fetch(url, options);
+
+    const data = JSON.parse(res.getContentText());
+    Logger.log(data); 
+    PROPERTY.setProperty("zns_refresh_token", data.refresh_token);
+    PROPERTY.setProperty("zns_access_token", data.access_token);
+  }
+  catch (err) {
+    Logger.log(err);
+  }
+}
+
+function refreshToken() {
+  let refreshToken = PROPERTY.getProperty("zns_refresh_token");
+  if(!refreshToken) return null;
+  let url = "https://oauth.zaloapp.com/v4/oa/access_token";
+  
+  let payload = {
+    app_id: CONFIG.APP_ID,
+    grant_type: 'refresh_token',
+    refresh_token: refreshToken,
+  }
+  let headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Secret_key": CONFIG.SECRET_KEY
+  }
+  const formData = Object.entries(payload)
+  .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+  .join("&");
+
+  const options = {
+    method: 'post',
+    payload: formData,
+    muteHttpExceptions: true,
+    headers: headers
+  };
+  Logger.log(options);
+  let res = UrlFetchApp.fetch(url, options);
+
+  const data = JSON.parse(res.getContentText());
+  Logger.log(data);
+  PROPERTY.setProperty("zns_refresh_token", data.refresh_token);
+  PROPERTY.setProperty("zns_access_token", data.access_token);
+
+  return data.access_token
+}
+//test fnc
+function getZnsTemplate() {
+  var accessToken = PROPERTY.getProperty("zns_access_token");
+
+  var url = "https://business.openapi.zalo.me/template/info/v2?template_id=477985";
+
+  var options = {
+    method: "get",
+    headers: {
+      "access_token": accessToken
+    },
+    muteHttpExceptions: true
+  };
+
+  var response = UrlFetchApp.fetch(url, options);
+  var data = JSON.parse(response.getContentText());
+  Logger.log("Danh sách template:" + JSON.stringify(data));
+}
+
+function standardlizeVNPhone(phone) {
+  if(!phone) return phone;
+  var cleaned = phone.toString().replace(/\D/g, '');
+
+  if (cleaned.indexOf('0') === 0) {
+    return '+84' + cleaned.substring(1);
+  }
+
+  if (cleaned.indexOf('84') === 0) {
+    return '+'.concat(cleaned);
+  }
+
+  if (phone.toString().indexOf('+84') === 0) {
+    return phone.toString();
+  }
+
+  return phone;
+}
+
+function standardlizeTime(dateInput) {
+  if (!dateInput) return '';
+  var date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  if (isNaN(date.getTime())) {
+    return '';
+  }
+  var hh = ('0' + date.getHours()).slice(-2);
+  var mm = ('0' + date.getMinutes()).slice(-2);
+  var ss = ('0' + date.getSeconds()).slice(-2);
+  var dd = ('0' + date.getDate()).slice(-2);
+  var MM = ('0' + (date.getMonth() + 1)).slice(-2);
+  var yyyy = date.getFullYear();
+
+  return hh + ':' + mm + ':' + ss + ' ' + dd + '/' + MM + '/' + yyyy;
+}
+
+function doPost(e) {
+  try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error('Không nhận được dữ liệu');
+    }
+
+    const data = JSON.parse(e.postData.contents);
+    console.log('Received data:', JSON.stringify(data));
+
+    console.log("data", data);
+
+    // Validate dữ liệu
+    validateFormData(data);
+    
+    // Lưu dữ liệu vào spreadsheet
+    saveToSpreadsheet(data);
+    
+    // Gửi email
+    sendEmails(data);
+
+    znsSender(data);
+    
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'success',
+      message: 'Dữ liệu đã được xử lý thành công'
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    console.error('Lỗi xử lý form:', error);
+    return ContentService.createTextOutput(JSON.stringify({ 
+      status: 'error',
+      message: error.toString()
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
+  }
 }

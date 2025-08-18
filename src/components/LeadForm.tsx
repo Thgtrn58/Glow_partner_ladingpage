@@ -39,8 +39,8 @@ const LeadForm: React.FC = () => {
 
     if (!formData.phone.trim()) {
       newErrors.phone = 'Số điện thoại không được để trống';
-    } else if (!/^[0-9]{10,11}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Số điện thoại phải có 10-11 chữ số';
+    } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/\s/g, ''))) {
+      newErrors.phone = 'Số điện thoại phải có 10 chữ số';
     }
 
     setErrors(newErrors);
@@ -127,7 +127,7 @@ const LeadForm: React.FC = () => {
         <div>
           <input
             type="tel"
-            placeholder="Số điện thoại *"
+            placeholder="Số điện thoại có dùng Zalo *"
             value={formData.phone}
             onChange={(e) => handleInputChange('phone', e.target.value)}
                       className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
