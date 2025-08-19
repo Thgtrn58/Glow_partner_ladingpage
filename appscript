@@ -137,9 +137,9 @@ body, #bodyTable { background-color: rgb(244, 244, 244); }
 }
 
 /**
- * Tạo template email cho Đối tác
+ * Tạo template email cho Đối tác - DEPRECATED
  */
-function createPartnerEmailBody(data) {
+function createPartnerEmailBody(data) { // This function is no longer used
   return `<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -253,57 +253,73 @@ body, #bodyTable { background-color: rgb(244, 244, 244); }
 }
 
 /**
- * Gửi email dựa theo vai trò
+ * Gửi email thông báo
  */
 function sendEmails(data) {
+  console.log('DEBUG - Input data received:', JSON.stringify(data, null, 2));
+
+  // Kiểm tra dữ liệu đầu vào
+  if (!data || typeof data !== 'object') {
+    console.error('DEBUG - Invalid data:', data);
+    throw new Error('Không có dữ liệu được gửi');
+  }
+
+  // Kiểm tra các trường bắt buộc
+  const requiredFields = ['name', 'phone'];
+  const missingFields = requiredFields.filter(field => !data[field]);
+  if (missingFields.length > 0) {
+    console.error('DEBUG - Missing required fields:', missingFields);
+    throw new Error(`Thiếu thông tin: ${missingFields.join(', ')}`);
+  }
+
+  // Kiểm tra cấu hình email
+  if (!CONFIG.ADMIN_EMAIL) {
+    console.error('DEBUG - Missing admin email configuration');
+    throw new Error('Chưa cấu hình email admin');
+  }
+
   try {
-    // Validate email configuration
-    if (!CONFIG.ADMIN_EMAIL || CONFIG.ADMIN_EMAIL === 'your-admin-email@example.com') {
-      throw new Error('Chưa cấu hình email admin');
-    }
-
-    // Validate data
-    if (!data || !data.email) {
-      throw new Error('Dữ liệu email không hợp lệ');
-    }
-
-    // Chọn template email dựa theo vai trò
-    const emailBody = data.selectedRole.toLowerCase().includes('kỹ thuật viên') 
-      ? createTechnicianEmailBody(data)
-      : createPartnerEmailBody(data);
-
-    // Chọn tiêu đề email dựa theo vai trò
-    const emailSubject = data.selectedRole.toLowerCase().includes('kỹ thuật viên')
-      ? 'Xác nhận đăng ký Kỹ thuật viên - Glow'
-      : 'Xác nhận đăng ký Đối tác - Glow';
-
-    // Gửi email cho người đăng ký
-    GmailApp.sendEmail(
-      data.email,
-      emailSubject,
-      'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
-      {
-        htmlBody: emailBody,
-        name: 'Glow Team'
-      }
-    );
-    console.log('Đã gửi email cho người dùng:', data.email);
-
-    // Gửi email cho admin
+    // Gửi email cho admin (bắt buộc)
+    console.log('DEBUG - Preparing admin email...');
     const adminEmailBody = createAdminEmailBody(data);
+    console.log('DEBUG - Admin email body created successfully');
+
     GmailApp.sendEmail(
       CONFIG.ADMIN_EMAIL,
-      `Đăng ký mới: ${data.selectedRole} - ${data.name}`,
+      `Đăng ký mới: Kỹ thuật viên - ${data.name}`,
       'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
       {
         htmlBody: adminEmailBody,
         name: 'Glow Website Notification'
       }
     );
-    console.log('Đã gửi email cho admin');
+    console.log('✓ Đã gửi email cho admin:', CONFIG.ADMIN_EMAIL);
+
+    // Gửi email cho người dùng (nếu có)
+    const userEmail = data.email ? data.email.trim() : '';
+    if (userEmail) {
+      console.log('DEBUG - Preparing user email...');
+      const userEmailBody = createTechnicianEmailBody(data);
+      console.log('DEBUG - User email body created successfully');
+
+      GmailApp.sendEmail(
+        userEmail,
+        'Xác nhận đăng ký Kỹ thuật viên - Glow',
+        'Vui lòng sử dụng email client hỗ trợ HTML để xem nội dung email này.',
+        {
+          htmlBody: userEmailBody,
+          name: 'Glow Team'
+        }
+      );
+      console.log('✓ Đã gửi email cho người dùng:', userEmail);
+    } else {
+      console.log('i Bỏ qua gửi email cho người dùng (không có email)');
+    }
+
+    return true; // Trả về true nếu gửi email thành công
   } catch (error) {
-    console.error('Lỗi khi gửi email:', error);
-    throw new Error('Không thể gửi email: ' + error.message);
+    console.error('DEBUG - Error in sendEmails:', error);
+    throw new Error('Lỗi gửi email: ' + error.message);
   }
 }
 
@@ -317,9 +333,12 @@ function createAdminEmailBody(data) {
       <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
         <p><strong>Thời gian:</strong> ${new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</p>
         <p><strong>Họ và tên:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Email:</strong> ${data.email || 'Không cung cấp'}</p>
         <p><strong>Số điện thoại:</strong> ${data.phone}</p>
-        <p><strong>Vai trò:</strong> ${data.selectedRole}</p>
+        <p><strong>Tỉnh/Thành phố:</strong> ${data.province}</p>
+        <p><strong>Kinh nghiệm:</strong> ${data.experience === 'experienced' ? 'Đã có kinh nghiệm' : 'Chưa có kinh nghiệm'}</p>
+        ${data.experience === 'experienced' && data.yearsOfExperience ? `<p><strong>Số năm kinh nghiệm:</strong> ${data.yearsOfExperience} năm</p>` : ''}
+        ${data.question ? `<p><strong>Câu hỏi thêm:</strong> ${data.question}</p>` : ''}
         <p><strong>Đồng ý nhận marketing:</strong> ${data.agreedToMarketing ? 'Có' : 'Không'}</p>
       </div>
       <p>Vui lòng liên hệ với ứng viên trong thời gian sớm nhất.</p>
@@ -333,9 +352,19 @@ function createAdminEmailBody(data) {
 function validateFormData(data) {
   if (!data) throw new Error('Không có dữ liệu được gửi');
   if (!data.name) throw new Error('Thiếu thông tin họ tên');
-  if (!data.email) throw new Error('Thiếu thông tin email');
   if (!data.phone) throw new Error('Thiếu thông tin số điện thoại');
-  if (!data.selectedRole) throw new Error('Thiếu thông tin vai trò');
+  if (!data.province) throw new Error('Thiếu thông tin tỉnh/thành phố');
+  if (!data.experience) throw new Error('Thiếu thông tin kinh nghiệm');
+  
+  // Email is now optional, so we don't validate it if it's empty
+  if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    throw new Error('Email không đúng định dạng');
+  }
+  
+  // Validate years of experience if provided
+  if (data.experience === 'experienced' && data.yearsOfExperience && Number(data.yearsOfExperience) < 1) {
+    throw new Error('Số năm kinh nghiệm phải từ 1 năm trở lên');
+  }
 }
 
 /**
@@ -354,7 +383,10 @@ function saveToSpreadsheet(data) {
       data.name || '',
       data.email || '',
       data.phone || '',
-      data.selectedRole || '',
+      data.province || '',
+      data.experience === 'experienced' ? 'Đã có kinh nghiệm' : 'Chưa có kinh nghiệm',
+      data.yearsOfExperience || '',
+      data.question || '',
       data.agreedToMarketing ? 'Có' : 'Không'
     ];
     
@@ -379,7 +411,10 @@ function setupSpreadsheet() {
       'Họ và tên',
       'Email',
       'Số điện thoại',
-      'Vai trò',
+      'Tỉnh/Thành phố',
+      'Kinh nghiệm',
+      'Số năm kinh nghiệm',
+      'Câu hỏi thêm',
       'Đồng ý nhận marketing'
     ];
     
@@ -415,36 +450,205 @@ function setupSpreadsheet() {
  * Test cấu hình
  */
 function testConfiguration() {
+  console.log('=== BẮT ĐẦU TEST CONFIGURATION ===');
+
   try {
-    // Kiểm tra cấu hình admin email
+    // 1. Kiểm tra cấu hình admin email
     if (!CONFIG.ADMIN_EMAIL || CONFIG.ADMIN_EMAIL === 'your-admin-email@example.com') {
       throw new Error('Vui lòng cấu hình ADMIN_EMAIL trước khi test');
     }
+    console.log('✓ Cấu hình admin email OK:', CONFIG.ADMIN_EMAIL);
 
-    // Tạo test data
-    const testData = {
-      name: 'Người Test',
-      email: 'ducthang.tran39@gmail.com',
-      phone: '0369940209',
-      selectedRole: 'Kỹ thuật viên',
-      agreedToMarketing: true
+    // 2. Tạo mock request data
+    const mockPostData = {
+      postData: {
+        contents: JSON.stringify({
+          name: "Nguyễn Văn Test",
+          email: "test@example.com",
+          phone: "0123456789",
+          province: "TP Hồ Chí Minh",
+          experience: "experienced",
+          yearsOfExperience: "5",
+          question: "Tôi muốn biết thêm về chế độ làm việc.",
+          agreedToMarketing: true
+        })
+      }
     };
+    console.log('✓ Tạo mock data OK');
 
-    console.log('Test data:', JSON.stringify(testData));
+    // 3. Test processFormData
+    console.log('\n1. Test xử lý dữ liệu:');
+    const processedData = processFormData(JSON.parse(mockPostData.postData.contents));
+    console.log('✓ Xử lý dữ liệu OK:', JSON.stringify(processedData, null, 2));
 
-    // Test lưu vào spreadsheet
-    // saveToSpreadsheet(testData);
-    // console.log('✓ Lưu spreadsheet thành công');
+    // 4. Test doPost
+    console.log('\n2. Test toàn bộ luồng xử lý:');
+    const response = doPost(mockPostData);
+    const result = JSON.parse(response.getContent());
     
-    // // Test gửi email
-    // sendEmails(testData);
-    // console.log('✓ Gửi email thành công');
+    console.log('Kết quả:', JSON.stringify(result, null, 2));
+    
+    if (result.status === 'success') {
+      console.log('✓ Test thành công!');
+      return 'Tất cả chức năng hoạt động tốt!';
+    } else if (result.status === 'partial') {
+      console.warn('⚠ Test thành công một phần:', result.message);
+      return 'Một số chức năng hoạt động, một số bị lỗi. Kiểm tra logs để biết chi tiết.';
+    } else {
+      throw new Error(result.message);
+    }
 
-    //Test send zns
-    znsSender(testData);
-    console.log('✓ Gửi ZNS thành công');
+  } catch (error) {
+    console.error('✗ Test thất bại:', error.message);
+    return `Lỗi: ${error.message}`;
+  } finally {
+    console.log('\n=== KẾT THÚC TEST CONFIGURATION ===');
+  }
+}
 
-    return 'Kiểm tra cấu hình thành công!';
+/**
+ * Test hàm sendEmails với nhiều trường hợp khác nhau
+ */
+function testSendEmails() {
+  // Tạo các test case
+  const testCases = [
+    {
+      name: "Case 1: Đầy đủ thông tin hợp lệ",
+      data: {
+        name: "Nguyễn Văn A",
+        email: "test@example.com",
+        phone: "0123456789",
+        province: "TP Hồ Chí Minh",
+        experience: "experienced",
+        yearsOfExperience: "5",
+        question: "Tôi muốn biết thêm về chế độ làm việc.",
+        agreedToMarketing: true
+      },
+      expectSuccess: true
+    },
+    {
+      name: "Case 2: Không có email (hợp lệ)",
+      data: {
+        name: "Trần Thị B",
+        email: "",
+        phone: "0987654321",
+        province: "Hà Nội",
+        experience: "no_experience",
+        yearsOfExperience: "",
+        question: "Tôi có thể bắt đầu làm việc ngay không?",
+        agreedToMarketing: false
+      },
+      expectSuccess: true
+    },
+    {
+      name: "Case 3: Thiếu tên (không hợp lệ)",
+      data: {
+        email: "test@example.com",
+        phone: "0123456789",
+        province: "TP Hồ Chí Minh",
+        experience: "experienced",
+        yearsOfExperience: "5",
+        agreedToMarketing: true
+      },
+      expectSuccess: false,
+      expectedError: "Thiếu thông tin cơ bản (tên/số điện thoại)"
+    },
+    {
+      name: "Case 4: Thiếu số điện thoại (không hợp lệ)",
+      data: {
+        name: "Lê Văn C",
+        email: "test@example.com",
+        province: "Đà Nẵng",
+        experience: "experienced",
+        yearsOfExperience: "2",
+        agreedToMarketing: true
+      },
+      expectSuccess: false,
+      expectedError: "Thiếu thông tin cơ bản (tên/số điện thoại)"
+    },
+    {
+      name: "Case 5: Email không hợp lệ (vẫn hợp lệ vì email không bắt buộc)",
+      data: {
+        name: "Phạm Thị D",
+        email: "not-an-email",
+        phone: "0123498765",
+        province: "Hải Phòng",
+        experience: "experienced",
+        yearsOfExperience: "10",
+        agreedToMarketing: true
+      },
+      expectSuccess: true
+    },
+    {
+      name: "Case 6: Dữ liệu null (không hợp lệ)",
+      data: null,
+      expectSuccess: false,
+      expectedError: "Không có dữ liệu được gửi"
+    }
+  ];
+
+  // Chạy test từng case
+  console.log("=== BẮT ĐẦU TEST SEND EMAILS ===\n");
+  
+  let passedTests = 0;
+  let failedTests = 0;
+  
+  for (let i = 0; i < testCases.length; i++) {
+    const testCase = testCases[i];
+    console.log(`--- Test case ${i + 1}: ${testCase.name} ---`);
+    
+    try {
+      sendEmails(testCase.data);
+      
+      if (testCase.expectSuccess) {
+        console.log("✓ PASS: Gửi email thành công như mong đợi");
+        passedTests++;
+      } else {
+        console.log("✗ FAIL: Gửi email thành công trong khi mong đợi thất bại");
+        console.log("  Mong đợi lỗi:", testCase.expectedError);
+        failedTests++;
+      }
+    } catch (error) {
+      if (!testCase.expectSuccess && error.message.includes(testCase.expectedError)) {
+        console.log("✓ PASS: Nhận được lỗi mong đợi:", error.message);
+        passedTests++;
+      } else if (testCase.expectSuccess) {
+        console.log("✗ FAIL: Gửi email thất bại trong khi mong đợi thành công");
+        console.log("  Lỗi nhận được:", error.message);
+        failedTests++;
+      } else {
+        console.log("✗ FAIL: Lỗi nhận được khác với mong đợi");
+        console.log("  Mong đợi:", testCase.expectedError);
+        console.log("  Nhận được:", error.message);
+        failedTests++;
+      }
+    }
+    
+    console.log(""); // Dòng trống giữa các test case
+  }
+  
+  console.log("=== KẾT QUẢ TEST SEND EMAILS ===");
+  console.log(`Tổng số test: ${testCases.length}`);
+  console.log(`Số test thành công: ${passedTests}`);
+  console.log(`Số test thất bại: ${failedTests}`);
+  
+  return {
+    total: testCases.length,
+    passed: passedTests,
+    failed: failedTests
+  };
+}
+
+/**
+ * Test gửi email với data test đầy đủ
+ */
+function testEmailWithFullData() {
+  const testData = createTestData(true);
+  try {
+    console.log('Test gửi email với data đầy đủ:');
+    console.log('Test data:', JSON.stringify(testData, null, 2));
+    sendEmails(testData);
+    return 'Test gửi email thành công!';
   } catch (error) {
     console.error('Lỗi khi test:', error);
     return `Lỗi: ${error.toString()}`;
@@ -452,50 +656,26 @@ function testConfiguration() {
 }
 
 /**
- * Test cả hai vai trò
+ * Tạo test data với đầy đủ thông tin
  */
-function testBothRoles() {
-  const testDataTechnician = {
-    name: 'Người Test KTV',
-    email: 'test@example.com',
+function createTestData(includeEmail = true) {
+  return {
+    name: 'Nguyễn Văn Test',
+    email: includeEmail ? 'test@example.com' : '',
     phone: '0123456789',
-    selectedRole: 'Kỹ thuật viên',
+    province: 'TP Hồ Chí Minh',
+    experience: 'experienced',
+    yearsOfExperience: '3',
+    question: 'Tôi muốn biết thêm về chế độ làm việc và thu nhập.',
     agreedToMarketing: true
   };
-
-  const testDataPartner = {
-    name: 'Người Test Đối tác',
-    email: 'test@example.com',
-    phone: '0123456789',
-    selectedRole: 'Đối tác',
-    agreedToMarketing: true
-  };
-
-  try {
-    console.log('Test gửi email Kỹ thuật viên:');
-    sendEmails(testDataTechnician);
-    
-    console.log('\nTest gửi email Đối tác:');
-    sendEmails(testDataPartner);
-    
-    return 'Test thành công cả hai vai trò!';
-  } catch (error) {
-    console.error('Lỗi khi test:', error);
-    return `Lỗi: ${error.toString()}`;
-  }
 }
 
 /**
  * Test email với template mới
  */
 function testEmailTemplate() {
-  const testData = {
-    name: 'Người Test',
-    email: 'test@example.com',
-    phone: '0123456789',
-    selectedRole: 'Kỹ thuật viên',
-    agreedToMarketing: true
-  };
+  const testData = createTestData();
 
   try {
     const emailBody = createTechnicianEmailBody(testData);
@@ -522,13 +702,7 @@ function testEmailTemplate() {
  * Test email với logo
  */
 function testEmailWithLogo() {
-  const testData = {
-    name: 'Người Test',
-    email: 'test@example.com',
-    phone: '0123456789',
-    selectedRole: 'Kỹ thuật viên',
-    agreedToMarketing: true
-  };
+  const testData = createTestData();
   
   try {
     const emailBody = createTechnicianEmailBody(testData);
@@ -580,13 +754,7 @@ function testLogoUrl() {
   console.log('Logo URL:', logoUrl);
   
   // Test gửi email với logo
-  const testData = {
-    name: 'Người Test',
-    email: 'test@example.com',
-    phone: '0123456789',
-    selectedRole: 'Kỹ thuật viên',
-    agreedToMarketing: true
-  };
+  const testData = createTestData();
   
   try {
     const emailBody = createTechnicianEmailBody(testData);
@@ -650,7 +818,7 @@ function znsSender(data) {
     }
   };
   Logger.log(payload)
-  const res = UrlFetchApp.fetch(url, {
+  let res = UrlFetchApp.fetch(url, {
     method: "post",
     contentType: "application/json",
     headers: {
@@ -658,17 +826,20 @@ function znsSender(data) {
     },
     payload: JSON.stringify(payload)
   });
-
+  let response = JSON.parse(res.getContentText());
   console.log(res.getContentText());
-  if(res.error == -124 || res.error == -126) {
-    access_token = refreshToken();
-    if(!access_token) throw "refresh_token_expired";
-    if(access_token) {
+  console.log(response);
+  if(response.error == -124 || response.error == -126) {
+    Logger.log("refresh access")
+    refreshToken();
+    var newAccessToken = PROPERTY.getProperty("zns_access_token");
+    if(!newAccessToken) throw "refresh_token_expired";
+    if(newAccessToken) {
       res = UrlFetchApp.fetch(url, {
         method: "post",
         contentType: "application/json",
         headers: {
-          access_token: access_token,
+          access_token: newAccessToken,
         },
         payload: JSON.stringify(payload)
       });
@@ -688,7 +859,7 @@ function getInitAccessToken() {
       "Content-Type": "application/x-www-form-urlencoded",
       "Secret_key": CONFIG.SECRET_KEY
     }
-    const formData = Object.entries(payload)
+    let formData = Object.entries(payload)
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
 
@@ -725,11 +896,11 @@ function refreshToken() {
     "Content-Type": "application/x-www-form-urlencoded",
     "Secret_key": CONFIG.SECRET_KEY
   }
-  const formData = Object.entries(payload)
+  let formData = Object.entries(payload)
   .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
   .join("&");
 
-  const options = {
+  let options = {
     method: 'post',
     payload: formData,
     muteHttpExceptions: true,
@@ -738,7 +909,7 @@ function refreshToken() {
   Logger.log(options);
   let res = UrlFetchApp.fetch(url, options);
 
-  const data = JSON.parse(res.getContentText());
+  var data = JSON.parse(res.getContentText());
   Logger.log(data);
   PROPERTY.setProperty("zns_refresh_token", data.refresh_token);
   PROPERTY.setProperty("zns_access_token", data.access_token);
@@ -799,40 +970,112 @@ function standardlizeTime(dateInput) {
   return hh + ':' + mm + ':' + ss + ' ' + dd + '/' + MM + '/' + yyyy;
 }
 
+function processFormData(formData) {
+  // Validate và chuẩn hóa dữ liệu
+  if (!formData || typeof formData !== 'object') {
+    throw new Error('Dữ liệu không hợp lệ');
+  }
+
+  // Đảm bảo các trường bắt buộc
+  const required = ['name', 'phone', 'province', 'experience'];
+  const missing = required.filter(field => !formData[field]);
+  if (missing.length > 0) {
+    throw new Error(`Thiếu thông tin: ${missing.join(', ')}`);
+  }
+
+  // Chuẩn hóa dữ liệu
+  return {
+    name: formData.name.trim(),
+    email: formData.email ? formData.email.trim() : '',
+    phone: formData.phone.trim(),
+    province: formData.province.trim(),
+    experience: formData.experience.trim(),
+    yearsOfExperience: formData.yearsOfExperience ? formData.yearsOfExperience.toString() : '',
+    question: formData.question ? formData.question.trim() : '',
+    agreedToMarketing: Boolean(formData.agreedToMarketing)
+  };
+}
+
 function doPost(e) {
+  console.log('=== Bắt đầu xử lý form ===');
+  
   try {
+    // 1. Validate request
     if (!e || !e.postData || !e.postData.contents) {
       throw new Error('Không nhận được dữ liệu');
     }
 
-    const data = JSON.parse(e.postData.contents);
-    console.log('Received data:', JSON.stringify(data));
+    // 2. Parse JSON
+    let rawData;
+    try {
+      rawData = JSON.parse(e.postData.contents);
+      console.log('Dữ liệu thô:', JSON.stringify(rawData, null, 2));
+    } catch (error) {
+      throw new Error('Dữ liệu không đúng định dạng JSON');
+    }
 
-    console.log("data", data);
+    // 3. Xử lý và chuẩn hóa dữ liệu
+    const data = processFormData(rawData);
+    console.log('Dữ liệu đã xử lý:', JSON.stringify(data, null, 2));
 
-    // Validate dữ liệu
-    validateFormData(data);
-    
-    // Lưu dữ liệu vào spreadsheet
-    saveToSpreadsheet(data);
-    
-    // Gửi email
-    sendEmails(data);
+    // 4. Thực hiện các chức năng
+    const results = {
+      spreadsheet: false,
+      email: false,
+      zns: false
+    };
 
-    znsSender(data);
-    
-    return ContentService.createTextOutput(JSON.stringify({ 
-      status: 'success',
-      message: 'Dữ liệu đã được xử lý thành công'
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
-    
+    // 4.1. Lưu spreadsheet
+    try {
+      saveToSpreadsheet(data);
+      results.spreadsheet = true;
+      console.log('✓ Đã lưu spreadsheet');
+    } catch (error) {
+      console.error('✗ Lỗi lưu spreadsheet:', error.message);
+    }
+
+    // 4.2. Gửi email
+    try {
+      sendEmails(data);
+      results.email = true;
+      console.log('✓ Đã gửi email');
+    } catch (error) {
+      console.error('✗ Lỗi gửi email:', error.message);
+    }
+
+    // 4.3. Gửi ZNS
+    try {
+      znsSender(data);
+      results.zns = true;
+      console.log('✓ Đã gửi ZNS');
+    } catch (error) {
+      console.error('✗ Lỗi gửi ZNS:', error.message);
+    }
+
+    // 5. Tổng kết kết quả
+    const successCount = Object.values(results).filter(Boolean).length;
+    const response = {
+      status: successCount === 3 ? 'success' : (successCount > 0 ? 'partial' : 'error'),
+      message: successCount === 3 
+        ? 'Xử lý thành công' 
+        : (successCount > 0 ? 'Xử lý một phần thành công' : 'Xử lý thất bại'),
+      results: results
+    };
+
+    console.log('=== Kết thúc xử lý form ===\n');
+    return ContentService.createTextOutput(JSON.stringify(response))
+      .setMimeType(ContentService.MimeType.JSON);
+
   } catch (error) {
-    console.error('Lỗi xử lý form:', error);
-    return ContentService.createTextOutput(JSON.stringify({ 
+    console.error('✗ Lỗi:', error.message);
+    const response = {
       status: 'error',
-      message: error.toString()
-    }))
-    .setMimeType(ContentService.MimeType.JSON);
+      message: error.message,
+      results: { spreadsheet: false, email: false, zns: false }
+    };
+    
+    console.log('=== Kết thúc xử lý form (có lỗi) ===\n');
+    return ContentService.createTextOutput(JSON.stringify(response))
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }

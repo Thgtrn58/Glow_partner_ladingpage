@@ -1,10 +1,26 @@
 import React, { useState } from 'react';
 import { submitToGoogleAppsScript } from '../api/forms';
 
+const vietnamProvinces = [
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu', 'Bắc Ninh', 'Bến Tre', 
+  'Bình Định', 'Bình Dương', 'Bình Phước', 'Bình Thuận', 'Cà Mau', 'Cần Thơ', 'Cao Bằng', 
+  'Đà Nẵng', 'Đắk Lắk', 'Đắk Nông', 'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 
+  'Hà Giang', 'Hà Nam', 'Hà Nội', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hậu Giang', 
+  'Hòa Bình', 'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu', 'Lâm Đồng', 
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An', 'Ninh Bình', 'Ninh Thuận', 
+  'Phú Thọ', 'Phú Yên', 'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 
+  'Sóc Trăng', 'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa', 'Thừa Thiên Huế', 
+  'Tiền Giang', 'TP Hồ Chí Minh', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long', 'Vĩnh Phúc', 'Yên Bái'
+];
+
 interface FormData {
   name: string;
   email: string; // Still string type but validation makes it optional
   phone: string;
+  province: string;
+  experience: string;
+  yearsOfExperience: string;
+  question: string;
   agreedToMarketing: boolean;
 }
 
@@ -12,6 +28,9 @@ interface FormErrors {
   name?: string;
   email?: string;
   phone?: string;
+  province?: string;
+  experience?: string;
+  yearsOfExperience?: string;
 }
 
 const LeadForm: React.FC = () => {
@@ -19,6 +38,10 @@ const LeadForm: React.FC = () => {
     name: '',
     email: '',
     phone: '',
+    province: '',
+    experience: '',
+    yearsOfExperience: '',
+    question: '',
     agreedToMarketing: false
   });
   
@@ -41,6 +64,18 @@ const LeadForm: React.FC = () => {
       newErrors.phone = 'Số điện thoại không được để trống';
     } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/\s/g, ''))) {
       newErrors.phone = 'Số điện thoại phải có 10 chữ số';
+    }
+
+    if (!formData.province) {
+      newErrors.province = 'Vui lòng chọn Tỉnh/Thành phố';
+    }
+
+    if (!formData.experience) {
+      newErrors.experience = 'Vui lòng chọn kinh nghiệm của bạn';
+    }
+
+    if (formData.experience === 'experienced' && formData.yearsOfExperience && Number(formData.yearsOfExperience) < 1) {
+      newErrors.yearsOfExperience = 'Số năm kinh nghiệm phải từ 1 năm trở lên';
     }
 
     setErrors(newErrors);
@@ -66,6 +101,10 @@ const LeadForm: React.FC = () => {
         name: '',
         email: '',
         phone: '',
+        province: '',
+        experience: '',
+        yearsOfExperience: '',
+        question: '',
         agreedToMarketing: false
       });
       
@@ -92,49 +131,120 @@ const LeadForm: React.FC = () => {
       {showSuccess && (
         <div className="bg-glow-50 border border-glow-200 rounded-lg p-4">
           <p className="text-glow-800 font-medium">
-            ✓ Đăng ký thành công! Chúng tôi sẽ liên hệ lại với bạn sớm nhất.
+            ✓ Đăng ký thành công! Hãy kiểm tra email và Zalo của bạn để được hướng dẫn các bước tiếp theo.
           </p>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            type="text"
-            placeholder="Họ và tên *"
-            value={formData.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-                      className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
-            errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
-          }`}
-          />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+      <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-6xl mx-auto px-4 md:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <input
+              type="text"
+              placeholder="Họ và tên *"
+              value={formData.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+              className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
+                errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
+              }`}
+            />
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          </div>
+
+          <div>
+            <input
+              type="email"
+              placeholder="Email (không bắt buộc)"
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+              className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
+                errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
+              }`}
+            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          </div>
+
+          <div>
+            <input
+              type="tel"
+              placeholder="Số điện thoại có dùng Zalo *"
+              value={formData.phone}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
+              className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
+                errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
+              }`}
+            />
+            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+          </div>
+
+          <div>
+            <select
+              value={formData.province}
+              onChange={(e) => handleInputChange('province', e.target.value)}
+              className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 appearance-none bg-white text-gray-500 ${
+                errors.province ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
+              }`}
+              style={{
+                backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 1rem center',
+                backgroundSize: '1em'
+              }}
+            >
+              <option value="" disabled selected className="text-gray-500">Tỉnh/Thành phố *</option>
+              {vietnamProvinces.map((province) => (
+                <option key={province} value={province}>{province}</option>
+              ))}
+            </select>
+            {errors.province && <p className="text-red-500 text-sm mt-1">{errors.province}</p>}
+          </div>
+
+          <div>
+            <select
+              value={formData.experience}
+              onChange={(e) => handleInputChange('experience', e.target.value)}
+              className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 appearance-none bg-white text-gray-500 ${
+                errors.experience ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
+              }`}
+              style={{
+                backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 1rem center',
+                backgroundSize: '1em'
+              }}
+            >
+              <option value="" disabled selected className="text-gray-500">Kinh nghiệm massage *</option>
+              <option value="experienced">Tôi đã có kinh nghiệm</option>
+              <option value="no_experience">Tôi chưa có kinh nghiệm</option>
+            </select>
+            {errors.experience && <p className="text-red-500 text-sm mt-1">{errors.experience}</p>}
+          </div>
+
+          {formData.experience === 'experienced' && (
+            <div>
+              <input
+                type="number"
+                min="1"
+                placeholder="Số năm kinh nghiệm (không bắt buộc)"
+                value={formData.yearsOfExperience}
+                onChange={(e) => handleInputChange('yearsOfExperience', e.target.value)}
+                className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
+                  errors.yearsOfExperience ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
+                }`}
+              />
+              {errors.yearsOfExperience && <p className="text-red-500 text-sm mt-1">{errors.yearsOfExperience}</p>}
+            </div>
+          )}
         </div>
 
         <div>
-          <input
-            type="email"
-            placeholder="Email (không bắt buộc)"
-            value={formData.email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
-                      className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
-            errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
-          }`}
+          <textarea
+            placeholder="Bạn có câu hỏi gì cho đội ngũ Glow không?"
+            value={formData.question}
+            onChange={(e) => handleInputChange('question', e.target.value)}
+            rows={3}
+            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 focus:border-glow-300"
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-        </div>
-
-        <div>
-          <input
-            type="tel"
-            placeholder="Số điện thoại có dùng Zalo *"
-            value={formData.phone}
-            onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 ${
-            errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200 focus:border-glow-300'
-          }`}
-          />
-          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
         </div>
 
         <div className="flex items-start space-x-3">
@@ -146,7 +256,7 @@ const LeadForm: React.FC = () => {
             className="mt-1 w-4 h-4 text-glow-600 border-gray-300 rounded focus:ring-glow-500"
           />
           <label htmlFor="marketing-consent" className="text-sm text-gray-600 leading-tight">
-            Tôi đồng ý nhận email marketing từ Glow
+            Tôi đồng ý nhận các thông báo marketing từ Glow
           </label>
         </div>
 

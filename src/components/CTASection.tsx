@@ -11,7 +11,7 @@ const CTASection: React.FC = () => {
   return (
     <section id="cta-section" className="bg-gradient-to-br from-white to-glow-50 py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
               {content.title}
@@ -24,10 +24,10 @@ const CTASection: React.FC = () => {
             </p>
           </div>
           
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-xl border border-glow-100/20">
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-xl border border-glow-100/20">
               <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6 text-center">
-                Tìm hiểu thêm?
+                Đăng ký để nhận thêm thông tin
               </h3>
               <p className="text-gray-600 mb-8 text-center text-lg">
                 Tài liệu giới thiệu Trở thành Kỹ thuật viên Glow.
