@@ -238,13 +238,25 @@ const LeadForm: React.FC = () => {
         </div>
 
         <div>
-          <textarea
-            placeholder="Bạn có câu hỏi gì cho đội ngũ Glow không?"
+          <select
             value={formData.question}
             onChange={(e) => handleInputChange('question', e.target.value)}
-            rows={3}
-            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 focus:border-glow-300"
-          />
+            className={`w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-glow-500 appearance-none bg-white text-gray-500 border-gray-200 focus:border-glow-300`}
+            style={{
+              backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 1rem center',
+              backgroundSize: '1em'
+            }}
+          >
+            <option value="" disabled selected className="text-gray-500">Bạn có câu hỏi gì cho đội ngũ Glow không?</option>
+            <option value="Khu vực của tôi có khách hàng không?">1. Khu vực của tôi có khách hàng không?</option>
+            <option value="Giờ giấc làm việc trên Glow có linh hoạt được không?">2. Giờ giấc làm việc trên Glow có linh hoạt được không?</option>
+            <option value="Đăng ký KTV trên Glow có mất phí không?">3. Đăng ký KTV trên Glow có mất phí không?</option>
+            <option value="Số tiền KTV nhận về tay trên mỗi đơn là bao nhiêu?">4. Số tiền KTV nhận về tay trên mỗi đơn là bao nhiêu?</option>
+            <option value="Glow cung cấp những dịch vụ gì cho khách hàng?">5. Glow cung cấp những dịch vụ gì cho khách hàng?</option>
+            <option value="Tôi chưa có kinh nghiệm, có tham gia được không?">6. Tôi chưa có kinh nghiệm, có tham gia được không?</option>
+          </select>
         </div>
 
         <div className="flex items-start space-x-3">
